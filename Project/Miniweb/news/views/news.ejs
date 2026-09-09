@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách tin tức</title>
+</head>
+<body>
+    <h1>Danh sách tin tức</h1>
+
+    <% if (newsList.length > 0) { %>
+        <% newsList.forEach(item => { %>
+            <div style="border-bottom: 1px solid #ccc; margin-bottom: 15px; padding-bottom: 10px;">
+                <h2><%= item.title %></h2>
+                <p><%= item.description %></p>
+                <p><small><strong>Tác giả:</strong> <%= item.author %> | <strong>Ngày tạo:</strong> <%= item.createdAt %></small></p>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>Không tìm thấy bài viết!</p>
+    <% } %>
+
+    <a href="/">Trang chủ</a>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html lang="vi"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <title>Sửa bài viết</title> 
+</head> 
+<body> 
+    <nav> 
+        <a href="/">Trang chủ</a>
+        <a href="/news">Tin tức</a>
+    </nav> 
+
+    <h1>Sửa bài viết</h1> 
+
+    <form action="/news/<%= post.id %>/edit" method="POST"> 
+        <div> 
+            <label for="title">Tiêu đề</label> 
+            <input type="text" id="title" name="title" value="<%= post.title %>"> 
+        </div> 
+
+        <div> 
+            <label for="description">Mô tả</label> 
+            <textarea id="description" name="description" rows="5"><%= post.description %></textarea> 
+        </div> 
+        
+        <button type="submit">Cập nhật</button> 
+    </form> 
+</body> 
+</html>

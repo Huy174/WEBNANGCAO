@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách bài viết</title>
+</head>
+<body>
+    <h1>Danh sách bài viết</h1>
+    <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/news">Tin tức</a>
+        <a href="/news/add">Thêm bài viết</a>
+    </nav>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <h3>
+                    <a href="/news/<%= post.id %>">
+                        <%= post.title %>
+                    </a>
+                </h3>
+            </li>
+        <% })%>    
+    </ul>
+</body>
+</html>

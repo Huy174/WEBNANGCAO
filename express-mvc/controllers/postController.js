@@ -2,7 +2,7 @@ const postModel = require("../models/postModel");
 async function index(req, res) {
   try {
     const posts = await postModel.getAllPosts();
-    res.render("news-list", { posts });
+    res.render("posts/index", { posts });
   } catch (error) {
     console.log(error);
     res.send("Lỗi khi lấy danh sách bài viết");
@@ -15,7 +15,7 @@ async function show(req, res) {
     if (!post) {
       return res.status(404).send("Không tìm thấy bài viết");
     }
-    res.render("news-detail", { post });
+    res.render("posts/show", { post });
   } catch (error) {
     console.error(error);
     res.send("Lỗi khi xem chi tiết bài viết");
@@ -25,14 +25,14 @@ async function search(req, res) {
   try {
     const keyword = req.query.keyword || "";
     const posts = await postModel.searchPosts(keyword);
-    res.render("news-list", { posts });
+    res.render("posts/index", { posts });
   } catch (error) {
     console.log(error);
     res.send("Lỗi khi tìm kiếm bài viết");
   }
 }
 function create(req, res) {
-  res.render("add-post");
+  res.render("posts/create");
 }
 async function store(req, res) {
   try {
@@ -52,7 +52,7 @@ async function edit(req, res) {
     if (!post) {
       return res.status(404).send("Không tìm thấy bài viết");
     }
-    res.render("edit-post", { post });
+    res.render("posts/edit", { post });
   } catch (error) {
     console.log(error);
     res.send("Lỗi khi mở form sửa");

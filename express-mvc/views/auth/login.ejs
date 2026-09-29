@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
+<%- include("../partials/header", { title: "Đăng nhập" }) %> 
+<%- include("../partials/navbar") %> 
 
   <h1>Đăng nhập</h1>
-
   <% if (error) { %>
     <p style="color: red;"><%= error %></p>
   <% } %>
@@ -28,5 +20,3 @@
     <button type="submit">Login</button>
   </form>
 
-</body>
-</html>

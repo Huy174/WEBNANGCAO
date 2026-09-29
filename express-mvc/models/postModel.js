@@ -7,7 +7,7 @@ async function getPostById(id) {
   const [rows] = await db.query("SELECT * FROM posts WHERE id = ?", [id]);
   return rows[0] || null;
 }
-async function searchPosts(Keyword) {
+async function searchPosts(keyword) {
   const [posts] = await db.query(
     "SELECT * FROM posts WHERE title LIKE ? OR description LIKE? ORDER BY id DESC",
     [`%${keyword}%`, `%${keyword}%`],

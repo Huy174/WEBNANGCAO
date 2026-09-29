@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel");
 function showLogin(req, res) {
-  res.render("login", { error: null });
+  res.render("auth/login", { error: null });
 }
 async function login(req, res) {
   try {
@@ -11,7 +11,7 @@ async function login(req, res) {
       password,
     );
     if (!user) {
-      return res.render("login", {
+      return res.render("auth/login", {
         error: "Sai username hoặc password",
       });
     }

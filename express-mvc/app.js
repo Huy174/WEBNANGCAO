@@ -2,6 +2,9 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const db = require("./config/db");
+const postModel = require("./models/postModel")
+const postController = require("./controllers/postController")
+const authController = require("./controllers/authController")
 
 const app = express();
 const port = 3000;
@@ -47,9 +50,8 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/login", (req, res) => {
-    res.render("login", { error: null });
-});
+app.get("/login", authController.showLogin)
+
 
 app.post("/login", async (req, res) => {
     try {
@@ -79,110 +81,28 @@ app.get("/logout", (req, res) => {
 // ================= ROUTE TIN TỨC (CÓ BẢO VỆ) =================
 
 // 1. Xem danh sách bài viết (Công khai - Ai cũng xem được)
-app.get("/news", async (req, res) => {
-    try {
-        const [posts] = await db.query("SELECT * FROM posts ORDER BY id DESC");
-        res.render("news-list", { posts });
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi lấy danh sách bài viết");
-    }
-});
+app.get("/news", postController.index)
 
 // 2. Tìm kiếm bài viết (Công khai - Đặt trước các route có param :id)
-app.get("/news/search", async (req, res) => {
-    try {
-        const keyword = req.query.keyword || "";
-        const [posts] = await db.query(
-            "SELECT * FROM posts WHERE title LIKE ? OR description LIKE ? ORDER BY id DESC", 
-            [`%${keyword}%`, `%${keyword}%`]
-        );
-        res.render("news-list", { posts });
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi tìm kiếm bài viết");    
-    }
-});
+app.get("/news/search", postController.search)
 
 // ================= 3. SỬ DỤNG MIDDLEWARE ĐỂ BẢO VỆ =================
 
 // Thêm bài viết (Yêu cầu đăng nhập)
-app.get("/news/add", requireLogin, (req, res) => {
-    res.render("add-post");
-});
+app.get("/news/add", requireLogin, postController.create)
 
-app.post("/news/add", requireLogin, async (req, res) => {   
-    try {
-        const title = req.body.title;
-        const description = req.body.description;
-        await db.query(
-            "INSERT INTO posts(title, description) VALUES (?, ?)",
-            [title, description]
-        );
-        res.redirect("/news");
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi thêm bài viết");
-    }
-});
-
+app.post("/news/add", requireLogin, postController.store)
 // Sửa bài viết (Yêu cầu đăng nhập)
-app.get("/news/:id/edit", requireLogin, async (req, res) => {
-    try {
-        const id = req.params.id;
-        const [rows] = await db.query("SELECT * FROM posts WHERE id = ?", [id]);
-        if (rows.length === 0) {
-            return res.status(404).send("Không tìm thấy bài viết");
-        }
-        res.render("edit-post", { post: rows[0] });
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi chỉnh sửa bài viết");
-    }
-});
+app.get("/news/:id/edit", requireLogin, postController.edit)
 
-app.post("/news/:id/edit", requireLogin, async (req, res) => {
-    try {
-        const id = req.params.id;
-        const title = req.body.title;
-        const description = req.body.description;
-        await db.query(
-            "UPDATE posts SET title = ?, description = ? WHERE id = ?",
-            [title, description, id]
-        );
-        res.redirect("/news");
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi cập nhật bài viết");
-    }
-});
+app.post("/news/:id/edit", requireLogin, postController.update)
 
 // Xóa bài viết (Yêu cầu đăng nhập)
-app.post("/news/:id/delete", requireLogin, async (req, res) => {
-    try {
-        const id = req.params.id;
-        await db.query("DELETE FROM posts WHERE id = ?", [id]);
-        res.redirect("/news");
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi xóa bài viết");
-    }
-});
+app.post("/news/:id/delete", requireLogin,postController.destroy)
 
 // 4. Chi tiết bài viết (Công khai - Đặt ở đáy cùng)
-app.get("/news/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const [rows] = await db.query("SELECT * FROM posts WHERE id = ?", [id]);
-        if (rows.length === 0) {
-            return res.status(404).send("Không tìm thấy bài viết");
-        }
-        res.render("news-detail", { post: rows[0] });
-    } catch (error) {
-        console.error(error);
-        res.send("Lỗi khi xem chi tiết bài viết");
-    }
-});
+app.get("/news/:id", postController.show)
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

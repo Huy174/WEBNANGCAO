@@ -1,9 +1,10 @@
-function NewsItem() {
+function NewsItem({ title, description, views, author }) {
   return (
-    <>
-      <h3>ReactJS</h3>
-      <p>ReactJS là thư viện xây dựng giao diện người dùng.</p>
-    </>
+    <div className="news-item">
+      <h3 className="news-title">{title}</h3>
+      <p>{description}</p>
+      <p className="news-meta">Lượt xem: {views}</p>
+    </div>
   );
 }
 export default NewsItem;

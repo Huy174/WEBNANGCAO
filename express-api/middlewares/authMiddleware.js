@@ -9,7 +9,6 @@ function usesession(req, res, next) {
   res.locals.user = req.session.user || null;
   next();
 }
-
 function requireApiLogin(req, res, next) {
   if (!req.session.user) {
     return res

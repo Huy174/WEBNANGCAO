@@ -27,10 +27,7 @@ async function login(req, res) {
   } catch (error) {
     console.log(error);
 
-    res.status(500).json({
-      success: false,
-      message: "Lỗi khi đăng nhập",
-    });
+    res.status(500).json({ success: false, message: "Lỗi khi đăng nhập" });
   }
 }
 
@@ -42,15 +39,9 @@ function logout(req, res) {
 
 function me(req, res) {
   if (!req.session.user) {
-    return res.status(401).json({
-      success: false,
-      message: "Chưa đăng nhập",
-    });
+    return res.status(401).json({ success: false, message: "Chưa đăng nhập" });
   }
-  res.json({
-    success: true,
-    user: req.session.user,
-  });
+  res.json({ success: true, user: req.session.user });
 }
 
 module.exports = { login, logout, me };
